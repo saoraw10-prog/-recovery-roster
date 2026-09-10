@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<title>จัดเวรพักฟื้น 5 คน</title>
+<title>จัดเวรพักฟื้น 5 คน V5 FIXED</title>
 <style>
 :root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,sans-serif;color:#1f2937;background:#f7f8fb}
 body{margin:0;padding:16px} h1{font-size:22px;margin:0 0 6px}.sub{color:#6b7280;font-size:13px;margin-bottom:14px}
@@ -16,14 +16,16 @@ button{border:0;background:#111827;color:#fff;font-weight:600}.secondary{backgro
 @media(max-width:600px){body{padding:10px}.summary-grid{grid-template-columns:1fr 1fr}.field{min-width:120px}}
 @media print{.no-print{display:none!important}body{background:white;padding:0}.card{box-shadow:none;margin:0;padding:4px}.table-wrap{overflow:visible;border:0}table{font-size:9px;min-width:0}th,td{padding:3px}.name{position:static}@page{size:landscape;margin:8mm}}
 </style>
-<link rel="manifest" href="manifest.json"></head>
+</head>
 <body>
-<h1>เว็บแอปจัดเวรพักฟื้น 5 คน</h1>
-<div class="sub">จัดเวรอัตโนมัติ • รายชื่อ Drop-down • เพิ่ม/ลบรายชื่อ • ส่งออก Excel</div>
+<h1>เว็บแอปจัดเวรพักฟื้น 5 คน <span class="badge">V5 FIXED</span></h1>
+<div class="sub">จัดเวรอัตโนมัติ • รายชื่อ Drop-down • เพิ่ม/ลบรายชื่อ • ส่งออก Excel • แก้ไข 10 ก.ย. 2569</div>
 
 <div class="card no-print">
   <div class="row">
-    <div class="field"><label>เดือน</label><select id="month"></select></div>
+    <div class="field"><label>เดือน</label><select id="month">
+<option value="0">มกราคม</option><option value="1">กุมภาพันธ์</option><option value="2">มีนาคม</option><option value="3">เมษายน</option><option value="4">พฤษภาคม</option><option value="5">มิถุนายน</option><option value="6">กรกฎาคม</option><option value="7">สิงหาคม</option><option value="8">กันยายน</option><option value="9">ตุลาคม</option><option value="10">พฤศจิกายน</option><option value="11">ธันวาคม</option>
+</select></div>
     <div class="field"><label>ปี พ.ศ.</label><input id="year" type="number" min="2560" max="2600"></div>
     <div class="field"><label>จำนวนคนต่อช่วงเวร</label><select id="need"><option value="1">1 คน</option><option value="2">2 คน</option></select></div>
     <button id="generate">จัดเวรอัตโนมัติ</button>
@@ -40,7 +42,7 @@ button{border:0;background:#111827;color:#fff;font-weight:600}.secondary{backgro
 <div class="card no-print">
 <h3 style="margin-top:0">2) จัดการรายชื่อ</h3>
 <div class="row"><input id="newName" placeholder="พิมพ์ชื่อ-สกุล" style="flex:1"><button id="addName" class="green">+ เพิ่มรายชื่อ</button></div>
-<div id="nameList" style="margin-top:10px"></div>
+<div id="nameList" style="margin-top:10px"></div><div class="note" style="margin-top:8px">เมื่อเพิ่มรายชื่อแล้ว ชื่อจะขึ้นใน Drop-down ของลำดับ 1–5 ทันที และชื่อที่เลือกแล้วจะไม่ให้เลือกซ้ำในลำดับอื่น</div>
 </div>
 
 <div class="card no-print">
@@ -83,7 +85,6 @@ let pool=JSON.parse(localStorage.getItem('recoveryNames')||'null')||[...DEFAULT_
 let selected=JSON.parse(localStorage.getItem('recoverySelected')||'null')||[...DEFAULT_NAMES];
 let sched={};
 const $=id=>document.getElementById(id);
-for(let i=0;i<12;i++){let o=document.createElement('option');o.value=i;o.textContent=TH_MONTHS[i];$('month').appendChild(o)}
 const now=new Date();$('month').value=now.getMonth();$('year').value=now.getFullYear()+543;
 function save(){localStorage.setItem('recoveryNames',JSON.stringify(pool));localStorage.setItem('recoverySelected',JSON.stringify(selected))}
 function renderNames(){
@@ -92,14 +93,29 @@ function renderNames(){
    const div=document.createElement('div'); div.className='row';div.style.margin='6px 0';
    const lab=document.createElement('div');lab.style.width='70px';lab.innerHTML='<b>ลำดับ '+(i+1)+'</b>';
    const sel=document.createElement('select');sel.style.flex='1';sel.dataset.i=i;
-   sel.innerHTML='<option value="">-- เลือกรายชื่อ --</option>'+pool.map(n=>`<option ${selected[i]===n?'selected':''}>${esc(n)}</option>`).join('');
-   sel.onchange=()=>{selected[i]=sel.value;save();renderNames();renderPrev()};
+   const usedByOthers=new Set(selected.filter((x,j)=>j!==i&&x));
+   let options='<option value="">-- เลือกรายชื่อ --</option>';
+   for(const n of pool){
+     if(usedByOthers.has(n) && selected[i]!==n) continue;
+     options+=`<option value="${esc(n)}" ${selected[i]===n?'selected':''}>${esc(n)}</option>`;
+   }
+   sel.innerHTML=options;
+   sel.onchange=()=>{
+     const val=sel.value;
+     if(val && selected.some((x,j)=>j!==i&&x===val)){
+       alert('รายชื่อนี้ถูกเลือกในลำดับอื่นแล้วค่ะ');
+       sel.value=selected[i]||'';
+       return;
+     }
+     selected[i]=val;save();renderNames();renderPrev();
+   };
    div.append(lab,sel);$('slots').appendChild(div);
  }
- $('nameList').innerHTML=pool.map((n,idx)=>`<span class="badge" style="margin:3px">${esc(n)} <button class="small danger" style="padding:2px 5px" onclick="delName(${idx})">×</button></span>`).join('');
+ $('nameList').innerHTML=pool.length?pool.map((n,idx)=>`<span class="badge" style="margin:3px">${esc(n)} <button class="small danger" style="padding:2px 5px" onclick="delName(${idx})">×</button></span>`).join(''):'<span class="note">ยังไม่มีรายชื่อ กรอกชื่อด้านบนแล้วกด + เพิ่มรายชื่อ</span>';
 }
 function delName(i){const n=pool[i];pool.splice(i,1);selected=selected.map(x=>x===n?'':x);save();renderNames();renderPrev()}
-$('addName').onclick=()=>{let n=$('newName').value.trim();if(!n)return;if(!pool.includes(n))pool.push(n);$('newName').value='';save();renderNames()};
+$('addName').onclick=()=>{let n=$('newName').value.trim();if(!n){alert('กรุณาพิมพ์ชื่อก่อนค่ะ');return;}if(pool.includes(n)){alert('มีรายชื่อนี้อยู่แล้วค่ะ');return;}pool.push(n);$('newName').value='';save();renderNames();renderPrev();};
+$('newName').addEventListener('keydown',e=>{if(e.key==='Enter'){$('addName').click()}});
 function renderPrev(){
  $('prevShifts').innerHTML='';
  for(let i=0;i<5;i++){
@@ -180,12 +196,12 @@ function renderRoster(y,m,days,totals,shTotals,warnings){
 function excelExport(){
  if(!Object.keys(sched).length){alert('กรุณาจัดเวรก่อนค่ะ');return}
  const yBE=+$('year').value,m=+$('month').value,y=yBE-543,days=new Date(y,m+1,0).getDate();
- let html='<html><head><meta charset="utf-8"><link rel="manifest" href="manifest.json"></head><body><table border="1"><tr><th colspan="'+(days+3)+'">ตารางเวรพักฟื้น '+TH_MONTHS[m]+' '+yBE+'</th></tr><tr><th>ลำดับ</th><th>ชื่อ</th>';
+ let html='<html><head><meta charset="utf-8"></head><body><table border="1"><tr><th colspan="'+(days+3)+'">ตารางเวรพักฟื้น '+TH_MONTHS[m]+' '+yBE+'</th></tr><tr><th>ลำดับ</th><th>ชื่อ</th>';
  for(let d=1;d<=days;d++)html+='<th>'+d+'</th>';html+='<th>รวมหน่วยเวร</th></tr>';
- for(let i=0;i<5;i++){let t=0;html+='<tr><td>'+(i+1)+'</td><td>'+esc(selected[i])+'</td>';for(let d=1;d<=days;d++){let c=sched[i][d]||'';t+=units(c);html+='<td>'+esc(c)+'</td>'}html+='<td>'+t+'</td></tr>'}html+='</table><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js").catch(()=>{})}</script></body></html>';
+ for(let i=0;i<5;i++){let t=0;html+='<tr><td>'+(i+1)+'</td><td>'+esc(selected[i])+'</td>';for(let d=1;d<=days;d++){let c=sched[i][d]||'';t+=units(c);html+='<td>'+esc(c)+'</td>'}html+='<td>'+t+'</td></tr>'}html+='</table></body></html>';
  const blob=new Blob(['\ufeff',html],{type:'application/vnd.ms-excel'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`ตารางเวรพักฟื้น_${yBE}_${m+1}.xls`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)
 }
 $('excel').onclick=excelExport;
 renderNames();renderPrev();
 </script>
-<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js").catch(()=>{})}</script></body></html>
+</body></html>
