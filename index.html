@@ -1,207 +1,163 @@
-<!doctype html>
-<html lang="th">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<title>จัดเวรพักฟื้น 5 คน V5 FIXED</title>
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ตารางเวรวิสัญญี V8</title><meta name="theme-color" content="#2563eb"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,sans-serif;color:#1f2937;background:#f7f8fb}
-body{margin:0;padding:16px} h1{font-size:22px;margin:0 0 6px}.sub{color:#6b7280;font-size:13px;margin-bottom:14px}
-.card{background:white;border-radius:16px;padding:14px;margin:12px 0;box-shadow:0 2px 10px rgba(0,0,0,.06)}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:end}.field{display:flex;flex-direction:column;gap:5px;min-width:130px;flex:1}
-label{font-size:12px;color:#4b5563} input,select,button{font:inherit;border-radius:10px;border:1px solid #d1d5db;padding:10px;background:#fff}
-button{border:0;background:#111827;color:#fff;font-weight:600}.secondary{background:#e5e7eb;color:#111827}.danger{background:#b91c1c}.green{background:#047857}
-.small{font-size:12px;padding:7px 9px}.note{font-size:12px;color:#6b7280;line-height:1.5}.rules{font-size:13px;line-height:1.65;background:#f9fafb;padding:10px;border-radius:10px}
-.table-wrap{overflow:auto;border:1px solid #e5e7eb;border-radius:12px}table{border-collapse:collapse;min-width:980px;width:100%;background:#fff}th,td{border:1px solid #e5e7eb;padding:6px;text-align:center;font-size:12px;white-space:nowrap}th{background:#f3f4f6;position:sticky;top:0;z-index:1}.name{position:sticky;left:0;background:#fff;z-index:2;text-align:left;min-width:150px}.weekend{background:#fff7ed}.vac{background:#fef2f2;font-weight:700}.off{background:#f3f4f6}.warn{background:#fef3c7;color:#92400e;padding:10px;border-radius:10px;font-size:12px;margin-top:8px}.ok{background:#ecfdf5;color:#065f46;padding:10px;border-radius:10px;font-size:12px;margin-top:8px}.badge{display:inline-block;border-radius:999px;padding:2px 7px;background:#eef2ff;font-size:11px}.summary-grid{display:grid;grid-template-columns:repeat(5,minmax(90px,1fr));gap:8px}.sum{background:#f9fafb;border-radius:10px;padding:8px;font-size:12px}
-@media(max-width:600px){body{padding:10px}.summary-grid{grid-template-columns:1fr 1fr}.field{min-width:120px}}
-@media print{.no-print{display:none!important}body{background:white;padding:0}.card{box-shadow:none;margin:0;padding:4px}.table-wrap{overflow:visible;border:0}table{font-size:9px;min-width:0}th,td{padding:3px}.name{position:static}@page{size:landscape;margin:8mm}}
-</style>
-</head>
-<body>
-<h1>เว็บแอปจัดเวรพักฟื้น 5 คน <span class="badge">V5 FIXED</span></h1>
-<div class="sub">จัดเวรอัตโนมัติ • รายชื่อ Drop-down • เพิ่ม/ลบรายชื่อ • ส่งออก Excel • แก้ไข 10 ก.ย. 2569</div>
+*{box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;background:#f5f7fb;color:#1f2937}
+header{background:#fff;padding:14px;border-bottom:1px solid #ddd}h1{font-size:20px;margin:0}.wrap{padding:10px}.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px;margin-bottom:12px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:end}label{display:block;font-size:13px;color:#475569;margin-bottom:4px}input,button{font:inherit}input{border:1px solid #cbd5e1;border-radius:8px;padding:8px}
+button{border:0;border-radius:8px;background:#2563eb;color:white;padding:10px 13px;font-weight:700}button.green{background:#15803d}button.gray{background:#475569}
+.status{margin-top:8px;padding:9px;border-radius:8px;background:#ecfdf5;border:1px solid #a7f3d0;font-size:13px}.scroll{overflow:auto;border:1px solid #94a3b8;border-radius:8px}
+table{border-collapse:collapse;font-size:11px;min-width:1550px}th,td{border:1px solid #94a3b8;padding:3px;text-align:center;height:28px;min-width:31px}th{background:#f1f5f9}
+.s1{position:sticky;left:0;background:#fff;z-index:3;min-width:40px}.s2{position:sticky;left:40px;background:#fff;z-index:3;min-width:160px;text-align:left}.hol{background:#fff7ed}.rec{background:#fdf4ff}.sum{background:#ecfccb;font-weight:700}
+.namegrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:7px;margin-top:8px}.nameitem{display:flex;align-items:center;gap:6px}.nameitem b{width:28px}.nameitem input,.nameitem select{width:100%;min-width:0}
+.req{min-width:650px;width:100%;font-size:13px}.req input{width:60px;text-align:center;padding:5px}.note{font-size:12px;color:#64748b;margin-top:6px}.staffbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.staffbar input{flex:1;min-width:220px}.stafflist{margin-top:10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:6px}.staffrow{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid #e2e8f0;border-radius:8px;padding:7px 9px;background:#f8fafc}.staffrow span{overflow:hidden;text-overflow:ellipsis}.staffrow button{padding:6px 9px;background:#b91c1c}.staffrow.fixed{background:#ecfdf5;border-color:#86efac}
+@media print{.no-print{display:none!important}.card{border:0;padding:0}.wrap{padding:0}body{background:#fff}.scroll{overflow:visible;border:0}table{font-size:8px;min-width:0;width:100%}th,td{padding:1px;min-width:0;height:18px}.s1,.s2{position:static}}
+</style></head><body>
+<header><h1>ตารางเวรพยาบาลวิสัญญี V8</h1><div class="note">จัดเวรหลัก → เติมพักฟื้น → ใส่ชื่อหลังจับฉลาก → ส่งออก Excel / พิมพ์</div></header><div class="wrap">
 
-<div class="card no-print">
-  <div class="row">
-    <div class="field"><label>เดือน</label><select id="month">
-<option value="0">มกราคม</option><option value="1">กุมภาพันธ์</option><option value="2">มีนาคม</option><option value="3">เมษายน</option><option value="4">พฤษภาคม</option><option value="5">มิถุนายน</option><option value="6">กรกฎาคม</option><option value="7">สิงหาคม</option><option value="8">กันยายน</option><option value="9">ตุลาคม</option><option value="10">พฤศจิกายน</option><option value="11">ธันวาคม</option>
-</select></div>
-    <div class="field"><label>ปี พ.ศ.</label><input id="year" type="number" min="2560" max="2600"></div>
-    <div class="field"><label>จำนวนคนต่อช่วงเวร</label><select id="need"><option value="1">1 คน</option><option value="2">2 คน</option></select></div>
-    <button id="generate">จัดเวรอัตโนมัติ</button>
-  </div>
-  <div class="note" style="margin-top:8px">จำนวนคนต่อช่วงเวรใช้เป็นเป้าหมายของ ช / บ / ด แต่หากกติกาทำให้จัดไม่ได้ ระบบจะเว้นช่องและแจ้งเตือนแทนการฝืนกติกา</div>
-</div>
+<div class="card no-print"><div class="controls"><div><label>เดือน / ปี</label><input id="month" type="month"></div><div style="flex:1;min-width:200px"><label>วันหยุดเพิ่มเติม เช่น 5,12,23</label><input id="holidays" style="width:100%" placeholder="5,12,23"></div><button id="mainBtn">จัดเวรหลัก</button></div><div id="status" class="status">พร้อมจัดเวร</div></div>
 
-<div class="card no-print">
-<h3 style="margin-top:0">1) รายชื่อ 5 ลำดับ</h3>
-<div id="slots"></div>
-<div class="note">ลำดับ 2–5 จะถูกถ่วงน้ำหนักให้จำนวนเวรใกล้เคียงกันที่สุด ส่วนลำดับ 1 จัดตามข้อจำกัดและวัน Off/Vac ที่ขอ</div>
-</div>
+<div class="card no-print"><b>1) เลือกรายชื่อหลังจับฉลาก</b><div class="controls" style="margin-top:8px"><div><label>จำนวนลำดับที่ใช้จัดเวร</label><input id="slotCount" type="number" min="1" max="99" style="width:100px"></div><button id="applySlots" class="green">ปรับจำนวนลำดับ</button></div><div class="note">แตะ Drop-down แล้วเลือกรายชื่อให้ตรงกับลำดับที่จับได้ • ชื่อที่เลือกแล้วจะไม่ให้เลือกซ้ำ • ลำดับ 20 ล็อกเป็น วิลาวรรณ เสวกจันทร์</div><div id="names" class="namegrid"></div></div>
+<div class="card no-print"><b>จัดการรายชื่อพยาบาล</b><div class="note">เพิ่มรายชื่อใหม่ได้เอง รายชื่อจะเข้า Drop-down ทันที • ลบรายชื่อที่ไม่ใช้ได้ • “วิลาวรรณ เสวกจันทร์” เป็นรายชื่อคงที่และลบไม่ได้</div><div class="staffbar"><input id="newStaff" placeholder="พิมพ์ชื่อ-สกุลที่ต้องการเพิ่ม"><button id="addStaff" class="green">+ เพิ่มรายชื่อ</button><button id="resetStaff" class="gray">คืนค่ารายชื่อเริ่มต้น</button></div><div id="staffList" class="stafflist"></div></div>
 
-<div class="card no-print">
-<h3 style="margin-top:0">2) จัดการรายชื่อ</h3>
-<div class="row"><input id="newName" placeholder="พิมพ์ชื่อ-สกุล" style="flex:1"><button id="addName" class="green">+ เพิ่มรายชื่อ</button></div>
-<div id="nameList" style="margin-top:10px"></div><div class="note" style="margin-top:8px">เมื่อเพิ่มรายชื่อแล้ว ชื่อจะขึ้นใน Drop-down ของลำดับ 1–5 ทันที และชื่อที่เลือกแล้วจะไม่ให้เลือกซ้ำในลำดับอื่น</div>
-</div>
+<div class="card"><b>2) ตารางเวร <span id="monthLabel"></span></b><div class="scroll" style="margin-top:8px"><table><thead id="head"></thead><tbody id="body"></tbody></table></div></div>
 
-<div class="card no-print">
-<h3 style="margin-top:0">3) เวรวันสุดท้ายของเดือนก่อน</h3>
-<div class="note">เพื่อให้วันที่ 1 ต่อเนื่องถูกต้อง โดยเฉพาะถ้าวันสุดท้ายเป็น ด → วันที่ 1 จะไม่ลงเวร</div>
-<div id="prevShifts" class="row" style="margin-top:8px"></div>
-</div>
+<div class="card no-print"><b>3) จำนวนเวรพักฟื้นที่ต้องเติมรายวัน</b><div class="note">พักฟื้นเช้าใช้เฉพาะวันหยุด • กรอก 0–2 คนตามจำนวนที่ขาดจริง</div><div class="scroll" style="margin-top:8px"><table class="req"><thead><tr><th>วันที่</th><th>ประเภทวัน</th><th>ฟช เพิ่ม</th><th>ฟบ เพิ่ม</th><th>ฟด เพิ่ม</th></tr></thead><tbody id="reqBody"></tbody></table></div><div class="controls" style="margin-top:8px"><button id="fillBtn">เติมเวรพักฟื้น</button><button id="clearBtn" class="gray">ล้างพักฟื้น</button></div></div>
 
-<div class="card no-print">
-<h3 style="margin-top:0">4) วันขอของลำดับ 1</h3>
-<div class="row">
-<div class="field"><label>วันที่ขอ Off (เช่น 3,10,21)</label><input id="offDates" placeholder="3,10,21"></div>
-<div class="field"><label>วันที่ Vacation (เช่น 15,16)</label><input id="vacDates" placeholder="15,16"></div>
+<div class="card no-print"><b>4) ส่งออกและพิมพ์</b>
+<div class="note" style="margin-top:6px">ดาวน์โหลดแบบรวมทุกชีต หรือแยกเฉพาะประเภทเพื่อส่งฝ่ายการได้ทันที</div>
+<div class="controls" style="margin-top:8px">
+<button id="excelBtn" class="green">Excel รวมทุกตาราง</button>
+<button id="excelAllBtn">ตารางเวรรวม</button>
+<button id="excelNBtn">ตารางเวร N</button>
+<button id="excelHBtn">ตารางเวร H</button>
+<button id="excelShiftBtn">ตารางเวร ช-บ-ด</button>
+<button id="excelRecBtn">ตารางเวรพักฟื้น</button>
+<button id="printBtn" class="gray">พิมพ์ตารางเวรรวม</button><button id="printListBtn" class="gray">พิมพ์รายชื่อแยกเวร</button>
+</div><div class="note">ไฟล์รวมจะมี 5 ชีต: เวรรวม • N • H • ช-บ-ด • พักฟื้น โดยจัดแนวนอนสำหรับพิมพ์</div></div>
 </div>
-</div>
-
-<div class="card no-print">
-<h3 style="margin-top:0">กติกาที่แอปใช้</h3>
-<div class="rules">
-• มี 5 ลำดับ<br>
-• ลำดับ 1: วันขอ Off/Vac จะล็อกไว้; วันอื่นจัด ช / บ / ด / ช-บ / ช-ด ได้; ถ้าลง ด วันถัดไปพัก<br>
-• ลำดับ 2–5: ถ่วงจำนวนเวรให้ใกล้เคียงกัน; จ–พฤ เน้นเวร บ และไม่ให้คนเดิมได้ บ ติดกัน; จ–ศ ระบบจะไม่ใส่คำว่า Off อัตโนมัติ; Off ใช้เฉพาะ ส–อา<br>
-• เสาร์–อาทิตย์ ลำดับ 2–5 ลง ช / บ / ด และเวรควบ ช-บ / ช-ด ได้ แต่วันอาทิตย์ห้าม ด และห้าม ช-ด<br>
-• หลังเวร ด วันถัดไปจะไม่จัดเวรให้คนนั้น<br>
-• ในหนึ่งวัน คนหนึ่งคนจะไม่ถูกจัดเกิน ช-บ หรือ ช-ด (ไม่จัด บ-ด)
-</div>
-</div>
-
-<div class="card">
-<div class="row no-print" style="justify-content:space-between;align-items:center"><h3 style="margin:0">ตารางเวร</h3><div><button id="excel" class="green small">ส่งออก Excel</button> <button onclick="window.print()" class="secondary small">พิมพ์</button></div></div>
-<div id="status"></div>
-<div class="table-wrap" style="margin-top:10px"><table id="roster"></table></div>
-<div id="summary" style="margin-top:10px"></div>
-</div>
-
 <script>
-const TH_MONTHS=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-const DEFAULT_NAMES=['พยาบาล 1','พยาบาล 2','พยาบาล 3','พยาบาล 4','พยาบาล 5'];
-let pool=JSON.parse(localStorage.getItem('recoveryNames')||'null')||[...DEFAULT_NAMES];
-let selected=JSON.parse(localStorage.getItem('recoverySelected')||'null')||[...DEFAULT_NAMES];
-let sched={};
-const $=id=>document.getElementById(id);
-const now=new Date();$('month').value=now.getMonth();$('year').value=now.getFullYear()+543;
-function save(){localStorage.setItem('recoveryNames',JSON.stringify(pool));localStorage.setItem('recoverySelected',JSON.stringify(selected))}
-function renderNames(){
- $('slots').innerHTML='';
- for(let i=0;i<5;i++){
-   const div=document.createElement('div'); div.className='row';div.style.margin='6px 0';
-   const lab=document.createElement('div');lab.style.width='70px';lab.innerHTML='<b>ลำดับ '+(i+1)+'</b>';
-   const sel=document.createElement('select');sel.style.flex='1';sel.dataset.i=i;
-   const usedByOthers=new Set(selected.filter((x,j)=>j!==i&&x));
-   let options='<option value="">-- เลือกรายชื่อ --</option>';
-   for(const n of pool){
-     if(usedByOthers.has(n) && selected[i]!==n) continue;
-     options+=`<option value="${esc(n)}" ${selected[i]===n?'selected':''}>${esc(n)}</option>`;
-   }
-   sel.innerHTML=options;
-   sel.onchange=()=>{
-     const val=sel.value;
-     if(val && selected.some((x,j)=>j!==i&&x===val)){
-       alert('รายชื่อนี้ถูกเลือกในลำดับอื่นแล้วค่ะ');
-       sel.value=selected[i]||'';
-       return;
-     }
-     selected[i]=val;save();renderNames();renderPrev();
-   };
-   div.append(lab,sel);$('slots').appendChild(div);
+(()=>{const M=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+const defs=[{k:'morning',c:'ช',n:3,hol:1},{k:'evening',c:'บ',n:4},{k:'night',c:'ด',n:2},{k:'N',c:'N',n:2},{k:'cardiac',c:'H',n:2,max:28}];
+let matrix={},mainTotal={},recTotal={},by={},days=0,year=0,mon=0,hset=new Set(),names={};
+let SLOT_COUNT=Math.max(1,parseInt(localStorage.getItem('an_slot_count')||'34',10)||34);
+const DEFAULT_STAFF=["นางเสาวลักษณ์ คล้ายอุดม", "นางอรอนงค์ โอคง", "นางสาวรัตติยา ศรอินทร์", "นางสาวนภเกตน์ ศรีเสน่ห์พร", "นางธิดารัตน์ ทีปะปาล", "นางวรรณฑานี จันดิถวงศ์", "นางสาวปุณยวีร์ สุวรรณพันธ์", "นางสุวรรณา อำสวง", "นางเสาวเพ็ญ จารุพันธ์", "นางสาวสุกัญญา ภัสสระ", "นางสาวขวัญจิต โอชุม", "นางนัฏกานต์ ยุติธรรม", "นางสาววิลาวรรณ เสวกจันทร์", "นางสาวณัฏฐณิชชา ส่งทวน", "นางสาวอรวรรณ แซ่ลิ้ม", "นางสาวสุนิสา เขียวคง", "นายพิเดช บุญนาม", "นางสาวพรทิพย์ ศิริกิจวัชรกุล", "นายธนบัตร ยังวนิชเศรษฐ", "นางเพลินพิศ เพชรเรืองตระกูล", "นางชัชฏาภรณ์ อินทร์เตรียะ", "นางสาวกมลพร สุวรรณมณี", "นางสาวดวงแก้ว เหมนะ", "นางสาววิกัญญา มหาทิพย์วิถี", "นางสาวเสาวรัตน์ แซ่เตียว", "นางสาวทิพรัฐ สุดเลิศ", "นางสาวรัชฏาภรณ์ บุญรอด", "นางสาวชลิกาญจน์ ศรีคง", "นางสาวรุ่งนภา สุดทองคง", "นายอนุวัฒน์ จันทวงษ์", "นางสาวทัศณีย์ รามแก้ว", "นางสาวกานติมา กล่อมสุวรรณ", "นางสาวศิรินันท์ แสงกล้า", "นางสาววรรณศิริ ภู่แก้ว", "นางสาวสิริวรรณ ถาวรวัชรกุล", "นางสาวกลิ่นสุคน์ รวยร่ำ", "นางสาวศิริลักษณ์ ลือชัย", "นายอนุศิษฐ์  ผึ่งดอกไม้", "นางสาวสุภาวรรณ  สังข์โชติ", "นางจิรา ราชเดิม", "นางสาววิจิตรพรรณ กิรวาที"];
+let STAFF=(()=>{try{let x=JSON.parse(localStorage.getItem('an_staff_list')||'null');return Array.isArray(x)&&x.length?x:DEFAULT_STAFF.slice()}catch(e){return DEFAULT_STAFF.slice()}})();
+const q=s=>document.querySelector(s),month=q('#month'),holidays=q('#holidays');
+function leader(n){return n<=20} function hol(d){let x=new Date(year,mon,d);return x.getDay()==0||x.getDay()==6||hset.has(d)}
+
+function cleanName(s){return (s||'').trim().replace(/\s+/g,' ')}
+function saveStaff(){localStorage.setItem('an_staff_list',JSON.stringify(STAFF))}
+function renderStaffList(){
+ let box=q('#staffList'); if(!box)return; box.innerHTML='';
+ const fixedClean='วิลาวรรณ เสวกจันทร์';
+ STAFF.forEach((full,i)=>{let div=document.createElement('div');let clean=cleanName(full.replace(/^(นางสาว|นาง|นาย)/,''));let fixed=clean===fixedClean;div.className='staffrow'+(fixed?' fixed':'');
+ div.innerHTML=`<span>${full}${fixed?' 🔒':''}</span>${fixed?'':'<button data-i="'+i+'">ลบ</button>'}`;box.appendChild(div)});
+ box.querySelectorAll('button[data-i]').forEach(btn=>btn.onclick=()=>{let i=+btn.dataset.i,name=STAFF[i];if(!confirm('ลบรายชื่อ “'+name+'” ใช่ไหม?'))return;STAFF.splice(i,1);for(let n=1;n<=SLOT_COUNT;n++){if(names[n]===name){names[n]='';localStorage.setItem('an_name_'+n,'')}}saveStaff();refreshNameOptions();renderStaffList();render()});
+}
+function addStaffName(){let inp=q('#newStaff'),v=cleanName(inp.value);if(!v){alert('กรุณาพิมพ์ชื่อ-สกุล');return}let vc=cleanName(v.replace(/^(นางสาว|นาง|นาย)/,''));if(STAFF.some(x=>cleanName(x.replace(/^(นางสาว|นาง|นาย)/,''))===vc)){alert('มีรายชื่อนี้อยู่แล้ว');return}STAFF.push(v);saveStaff();inp.value='';refreshNameOptions();renderStaffList();}
+function resetStaffList(){if(!confirm('คืนค่ารายชื่อเป็นชุดเริ่มต้นหรือไม่? รายชื่อที่เพิ่มเองจะถูกลบออก'))return;STAFF=DEFAULT_STAFF.slice();saveStaff();for(let n=1;n<=SLOT_COUNT;n++){if(n!==20&&names[n]&&!STAFF.includes(names[n])){names[n]='';localStorage.setItem('an_name_'+n,'')}}refreshNameOptions();renderStaffList();render()}
+function initNames(){
+ let box=q('#names');box.innerHTML='';
+ for(let n=1;n<=SLOT_COUNT;n++){
+   names[n]=n===20?'วิลาวรรณ เสวกจันทร์':(localStorage.getItem('an_name_'+n)||'');
+   let div=document.createElement('div');div.className='nameitem';
+   if(n===20){div.innerHTML=`<b>${n}</b><input value="วิลาวรรณ เสวกจันทร์" readonly>`}
+   else{div.innerHTML=`<b>${n}</b><select data-n="${n}"></select>`}
+   box.appendChild(div)
  }
- $('nameList').innerHTML=pool.length?pool.map((n,idx)=>`<span class="badge" style="margin:3px">${esc(n)} <button class="small danger" style="padding:2px 5px" onclick="delName(${idx})">×</button></span>`).join(''):'<span class="note">ยังไม่มีรายชื่อ กรอกชื่อด้านบนแล้วกด + เพิ่มรายชื่อ</span>';
+ refreshNameOptions();
+ box.querySelectorAll('select').forEach(sel=>sel.onchange=()=>{
+   let n=+sel.dataset.n; names[n]=sel.value; localStorage.setItem('an_name_'+n,sel.value); refreshNameOptions(); render();
+ });
 }
-function delName(i){const n=pool[i];pool.splice(i,1);selected=selected.map(x=>x===n?'':x);save();renderNames();renderPrev()}
-$('addName').onclick=()=>{let n=$('newName').value.trim();if(!n){alert('กรุณาพิมพ์ชื่อก่อนค่ะ');return;}if(pool.includes(n)){alert('มีรายชื่อนี้อยู่แล้วค่ะ');return;}pool.push(n);$('newName').value='';save();renderNames();renderPrev();};
-$('newName').addEventListener('keydown',e=>{if(e.key==='Enter'){$('addName').click()}});
-function renderPrev(){
- $('prevShifts').innerHTML='';
- for(let i=0;i<5;i++){
-   let d=document.createElement('div');d.className='field';d.innerHTML=`<label>ลำดับ ${i+1} ${esc(selected[i]||'')}</label><select id="prev${i}"><option value="">-</option><option>ช</option><option>บ</option><option>ด</option><option>ช/บ</option><option>ช/ด</option><option>Off</option><option>Vac</option></select>`;$('prevShifts').appendChild(d)
- }
+function refreshNameOptions(){
+ const selected=new Set(Object.entries(names).filter(([n,v])=>+n!==20&&v).map(([n,v])=>v));
+ q('#names').querySelectorAll('select').forEach(sel=>{
+   const n=+sel.dataset.n, current=names[n]||'';
+   sel.innerHTML='<option value="">-- ยังไม่กำหนด --</option>';
+   STAFF.forEach(full=>{
+     const clean=full.replace(/^(นางสาว|นาง|นาย)/,'').trim();
+     if(clean==='วิลาวรรณ เสวกจันทร์') return;
+     const opt=document.createElement('option'); opt.value=full; opt.textContent=full;
+     if(full===current) opt.selected=true;
+     if(selected.has(full)&&full!==current) opt.disabled=true;
+     sel.appendChild(opt);
+   });
+ });
 }
-function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function parseDates(v,max){return new Set(v.split(',').map(x=>parseInt(x.trim())).filter(x=>x>=1&&x<=max))}
-function units(code){if(!code||code==='Off'||code==='Vac')return 0;return code.split('/').length}
-function has(code,sh){return code&&code.split('/').includes(sh)}
-function allowed(i,day,dow,sh,lastCode,off1,vac1){
- if(i===0){if(vac1.has(day)||off1.has(day))return false;if(lastCode&&has(lastCode,'ด'))return false;return true}
- if(lastCode&&has(lastCode,'ด'))return false;
- if(dow===0 && sh==='ด')return false;
- if(dow>=1&&dow<=4){ if(sh!=='บ') return false; }
- // Friday: allow any single shift to avoid impossible no-off interpretation
- return true;
+function applySlotCount(){
+ const inp=q('#slotCount'); let v=Math.max(1,Math.min(99,parseInt(inp.value||SLOT_COUNT,10)||SLOT_COUNT));
+ SLOT_COUNT=v; localStorage.setItem('an_slot_count',String(SLOT_COUNT)); inp.value=SLOT_COUNT;
+ initNames(); generate(); q('#status').textContent='ปรับจำนวนลำดับเป็น '+SLOT_COUNT+' คนแล้ว';
 }
-function generate(){
- if(selected.some(x=>!x)){alert('กรุณาเลือกรายชื่อให้ครบ 5 ลำดับก่อนค่ะ');return}
- const yBE=+$('year').value,m=+$('month').value,y=yBE-543,days=new Date(y,m+1,0).getDate(),need=+$('need').value;
- const off1=parseDates($('offDates').value,days),vac1=parseDates($('vacDates').value,days);
- sched={};for(let i=0;i<5;i++)sched[i]={};
- const totals=[0,0,0,0,0], shTotals=Array.from({length:5},()=>({ช:0,บ:0,ด:0}));
- let last=Array.from({length:5},(_,i)=>$('prev'+i).value||'');
- let warnings=[];
- for(let day=1;day<=days;day++){
-   const dow=new Date(y,m,day).getDay();
-   for(let i=0;i<5;i++)sched[i][day]='';
-   if(vac1.has(day)) sched[0][day]='Vac'; else if(off1.has(day)||has(last[0],'ด')) sched[0][day]='Off';
-   // For 2-5, weekends may display Off only if left unassigned at end; weekdays remain blank when not rostered.
-   const assigned=Array.from({length:5},()=>[]);
-   if(sched[0][day]) assigned[0]=[];
-   const shifts=['ช','บ','ด'];
-   for(const sh of shifts){
-     for(let k=0;k<need;k++){
-       let cand=[];
-       for(let i=0;i<5;i++){
-         if(sched[i][day])continue;
-         if(!allowed(i,day,dow,sh,last[i],off1,vac1))continue;
-         const a=assigned[i];
-         if(a.length>=2)continue;
-         if(a.length===1){
-           if(a[0]==='บ' || sh==='บ' && a[0]==='ด' || a[0]==='ด')continue;
-           if(!((a[0]==='ช'&&['บ','ด'].includes(sh))))continue;
-           if(dow===0 && sh==='ด')continue;
-         }
-         // Mon-Thu: 2-5 only B; person1 can cover other shifts
-         let score=totals[i]*10+shTotals[i][sh]*3;
-         if(i===0)score+=8; // prefer balancing 2-5 before using #1 when possible
-         if(i>=1&&i<=4&&dow>=1&&dow<=4&&sh==='บ'&&has(last[i],'บ'))score+=50; // avoid consecutive B
-         cand.push({i,score});
-       }
-       cand.sort((a,b)=>a.score-b.score||Math.random()-.5);
-       if(!cand.length){warnings.push(`วันที่ ${day} เวร ${sh} จัดได้ไม่ครบ ${need} คน`);break}
-       const i=cand[0].i;assigned[i].push(sh);totals[i]++;shTotals[i][sh]++;
-     }
+function init(){matrix={};mainTotal={};recTotal={};by={};for(let n=1;n<=SLOT_COUNT;n++){matrix[n]={};mainTotal[n]=0;recTotal[n]={rm:0,re:0,rn:0};by[n]={morning:0,evening:0,night:0,N:0,cardiac:0}}}
+function choose(pool,count,used,key){pool=pool.filter(n=>!used.has(n)).sort((a,b)=>(by[a][key]*100+mainTotal[a])-(by[b][key]*100+mainTotal[b])||a-b);let out=[],l=pool.find(leader);if(l){out.push(l);used.add(l)}for(const n of pool){if(out.length>=count)break;if(!used.has(n)){out.push(n);used.add(n)}}return out}
+function generate(){[year,mon]=month.value.split('-').map(Number);mon--;days=new Date(year,mon+1,0).getDate();hset=new Set(holidays.value.split(',').map(x=>parseInt(x.trim())).filter(x=>x>=1&&x<=days));init();
+for(let d=1;d<=days;d++){let used=new Set(),isH=hol(d);for(const s of defs){if(s.hol&&!isH)continue;let pool=Array.from({length:Math.min(s.max||SLOT_COUNT,SLOT_COUNT)},(_,i)=>i+1).filter(n=>!(isH&&n===20));let a=choose(pool,s.n,used,s.k);a.forEach(n=>{matrix[n][d]=s.c;mainTotal[n]++;by[n][s.k]++})}}
+renderReq();render();q('#monthLabel').textContent='เดือน'+M[mon]+' พ.ศ. '+(year+543);q('#status').textContent='จัดเวรหลักเรียบร้อยแล้ว'}
+function renderReq(){let b=q('#reqBody');b.innerHTML='';for(let d=1;d<=days;d++){let H=hol(d),tr=document.createElement('tr');tr.innerHTML=`<td>${d}</td><td class="${H?'hol':''}">${H?'วันหยุด':'วันทำการ'}</td><td>${H?`<input class="rm" data-d="${d}" type="number" min="0" max="2" value="0">`:'–'}</td><td><input class="re" data-d="${d}" type="number" min="0" max="2" value="0"></td><td><input class="rn" data-d="${d}" type="number" min="0" max="2" value="0"></td>`;b.appendChild(tr)}}
+function rp(d,c,t){if(!c)return;let H=hol(d),pool=Array.from({length:SLOT_COUNT},(_,i)=>i+1).filter(n=>!(H&&n===20)&&!matrix[n][d]);pool.sort((a,b)=>recTotal[a][t]-recTotal[b][t]||(recTotal[a].rm+recTotal[a].re+recTotal[a].rn)-(recTotal[b].rm+recTotal[b].re+recTotal[b].rn)||mainTotal[a]-mainTotal[b]||a-b);let code={rm:'ฟช',re:'ฟบ',rn:'ฟด'}[t];pool.slice(0,c).forEach(n=>{matrix[n][d]=code;recTotal[n][t]++})}
+function clearRec(){for(let n=1;n<=SLOT_COUNT;n++){recTotal[n]={rm:0,re:0,rn:0};for(let d=1;d<=days;d++)if(['ฟช','ฟบ','ฟด'].includes(matrix[n][d]))delete matrix[n][d]}render()}
+function fill(){clearRec();for(let d=1;d<=days;d++){let a=q(`.rm[data-d="${d}"]`),b=q(`.re[data-d="${d}"]`),c=q(`.rn[data-d="${d}"]`);rp(d,a?Math.min(2,+a.value||0):0,'rm');rp(d,Math.min(2,+b.value||0),'re');rp(d,Math.min(2,+c.value||0),'rn')}render();q('#status').textContent='เติมเวรพักฟื้นเรียบร้อยแล้ว'}
+function render(){let h='<tr><th class="s1">ลำดับ</th><th class="s2">ชื่อ-สกุล</th>';for(let d=1;d<=days;d++)h+=`<th class="${hol(d)?'hol':''}">${d}</th>`;h+='<th class="sum">รวม</th><th class="sum">ช</th><th class="sum">บ</th><th class="sum">ด</th><th class="sum">N</th><th class="sum">H</th><th class="sum">ฟช</th><th class="sum">ฟบ</th><th class="sum">ฟด</th></tr>';q('#head').innerHTML=h;let b=q('#body');b.innerHTML='';
+for(let n=1;n<=SLOT_COUNT;n++){let tr=document.createElement('tr'),c=`<td class="s1">${n}</td><td class="s2">${names[n]||'ลำดับ '+n}</td>`;for(let d=1;d<=days;d++){let v=matrix[n][d]||'';c+=`<td class="${hol(d)?'hol ':''}${v.startsWith('ฟ')?'rec':''}"><b>${v}</b></td>`}let r=recTotal[n];c+=`<td class="sum">${mainTotal[n]+r.rm+r.re+r.rn}</td><td class="sum">${by[n].morning}</td><td class="sum">${by[n].evening}</td><td class="sum">${by[n].night}</td><td class="sum">${by[n].N}</td><td class="sum">${by[n].cardiac}</td><td class="sum">${r.rm}</td><td class="sum">${r.re}</td><td class="sum">${r.rn}</td>`;tr.innerHTML=c;b.appendChild(tr)}}
+function ensureXLSX(){if(typeof XLSX==='undefined'){alert('ต้องเชื่อมต่ออินเทอร์เน็ตครั้งแรกเพื่อเปิดระบบ Excel');return false}return true}
+function makeSheet(title,codes,summaryCols){
+  let aoa=[[title+' เดือน'+M[mon]+' พ.ศ. '+(year+543)],[]];
+  let hdr=['ลำดับ','ชื่อ-สกุล'];for(let d=1;d<=days;d++)hdr.push(d);hdr.push(...summaryCols.map(x=>x.label));aoa.push(hdr);
+  for(let n=1;n<=SLOT_COUNT;n++){
+    let row=[n,names[n]||'ลำดับ '+n];
+    for(let d=1;d<=days;d++){let v=matrix[n][d]||'';row.push(codes===null?v:(codes.includes(v)?v:''));}
+    summaryCols.forEach(x=>row.push(x.val(n)));aoa.push(row)
+  }
+  let ws=XLSX.utils.aoa_to_sheet(aoa);
+  ws['!merges']=[{s:{r:0,c:0},e:{r:0,c:1+days+summaryCols.length}}];
+  ws['!cols']=[{wch:6},{wch:26},...Array(days).fill({wch:4}),...Array(summaryCols.length).fill({wch:7})];
+  ws['!pageSetup']={orientation:'landscape',fitToWidth:1,fitToHeight:0,paperSize:9};
+  ws['!margins']={left:0.25,right:0.25,top:0.4,bottom:0.4,header:0.2,footer:0.2};
+  return ws;
+}
+const allSummary=[
+ {label:'รวม',val:n=>{let r=recTotal[n];return mainTotal[n]+r.rm+r.re+r.rn}},
+ {label:'ช',val:n=>by[n].morning},{label:'บ',val:n=>by[n].evening},{label:'ด',val:n=>by[n].night},
+ {label:'N',val:n=>by[n].N},{label:'H',val:n=>by[n].cardiac},
+ {label:'ฟช',val:n=>recTotal[n].rm},{label:'ฟบ',val:n=>recTotal[n].re},{label:'ฟด',val:n=>recTotal[n].rn}
+];
+const nSummary=[{label:'รวม N',val:n=>by[n].N}];
+const hSummary=[{label:'รวม H',val:n=>by[n].cardiac}];
+const shiftSummary=[{label:'รวม ช',val:n=>by[n].morning},{label:'รวม บ',val:n=>by[n].evening},{label:'รวม ด',val:n=>by[n].night},{label:'รวม ชบด',val:n=>by[n].morning+by[n].evening+by[n].night}];
+const recSummary=[{label:'รวม ฟช',val:n=>recTotal[n].rm},{label:'รวม ฟบ',val:n=>recTotal[n].re},{label:'รวม ฟด',val:n=>recTotal[n].rn},{label:'รวมพักฟื้น',val:n=>recTotal[n].rm+recTotal[n].re+recTotal[n].rn}];
+function addAllSheets(wb){
+ XLSX.utils.book_append_sheet(wb,makeSheet('ตารางเวรรวม',null,allSummary),'เวรรวม');
+ XLSX.utils.book_append_sheet(wb,makeSheet('ตารางเวร N',['N'],nSummary),'เวร N');
+ XLSX.utils.book_append_sheet(wb,makeSheet('ตารางเวร H',['H'],hSummary),'เวร H');
+ XLSX.utils.book_append_sheet(wb,makeSheet('ตารางเวร ช-บ-ด',['ช','บ','ด'],shiftSummary),'เวร ช-บ-ด');
+ XLSX.utils.book_append_sheet(wb,makeSheet('ตารางเวรพักฟื้น',['ฟช','ฟบ','ฟด'],recSummary),'เวรพักฟื้น');
+}
+function exportExcel(){if(!ensureXLSX())return;let wb=XLSX.utils.book_new();addAllSheets(wb);XLSX.writeFile(wb,`ตารางเวร_ครบทุกประเภท_${M[mon]}_${year+543}.xlsx`)}
+function exportOne(kind){if(!ensureXLSX())return;let cfg={
+ all:['ตารางเวรรวม',null,allSummary,'ตารางเวรรวม','เวรรวม'],
+ N:['ตารางเวร N',['N'],nSummary,'ตารางเวร_N','เวร N'],
+ H:['ตารางเวร H',['H'],hSummary,'ตารางเวร_H','เวร H'],
+ shift:['ตารางเวร ช-บ-ด',['ช','บ','ด'],shiftSummary,'ตารางเวร_ช-บ-ด','เวร ช-บ-ด'],
+ rec:['ตารางเวรพักฟื้น',['ฟช','ฟบ','ฟด'],recSummary,'ตารางเวร_พักฟื้น','เวรพักฟื้น']
+ }[kind];let wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,makeSheet(cfg[0],cfg[1],cfg[2]),cfg[4]);XLSX.writeFile(wb,`${cfg[3]}_${M[mon]}_${year+543}.xlsx`)}
+function printShiftList(){
+ const codes=['ช','บ','ด','N','H','ฟช','ฟบ','ฟด'];
+ let html='<!doctype html><html lang="th"><head><meta charset="utf-8"><title>รายชื่อแยกเวร</title><style>body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:18px;color:#111}h2{text-align:center;margin:0 0 12px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{border:1px solid #666;padding:5px;vertical-align:top}th{background:#eee}.day{width:44px;text-align:center}.type{width:60px;text-align:center}.names{white-space:pre-line}@media print{body{padding:0}}</style></head><body>';
+ html+='<h2>รายชื่อเวร เดือน'+M[mon]+' พ.ศ. '+(year+543)+'</h2><table><thead><tr><th class="day">วันที่</th><th class="type">เวร</th><th>รายชื่อ</th></tr></thead><tbody>';
+ for(let d=1;d<=days;d++){
+   let first=true;
+   for(const code of codes){
+     let arr=[]; for(let n=1;n<=SLOT_COUNT;n++) if(matrix[n]&&matrix[n][d]===code) arr.push((names[n]||('ลำดับ '+n))+' ('+n+')');
+     if(!arr.length) continue;
+     html+='<tr>'+(first?'<td class="day" rowspan="'+codes.filter(c=>{for(let n=1;n<=SLOT_COUNT;n++)if(matrix[n]&&matrix[n][d]===c)return true;return false}).length+'">'+d+'</td>':'')+'<td class="type"><b>'+code+'</b></td><td class="names">'+arr.join('<br>')+'</td></tr>'; first=false;
    }
-   for(let i=0;i<5;i++){
-     if(!sched[i][day]){
-       if(assigned[i].length)sched[i][day]=assigned[i].join('/');
-       else if(i>=1 && (dow===0||dow===6))sched[i][day]='Off';
-       else sched[i][day]='';
-     }
-     last[i]=sched[i][day]||last[i];
-   }
  }
- renderRoster(y,m,days,totals,shTotals,warnings);
+ html+='</tbody></table><script>window.onload=()=>window.print()<\/script></body></html>';
+ const w=window.open('','_blank'); if(!w){alert('กรุณาอนุญาต Pop-up เพื่อพิมพ์รายชื่อแยกเวร');return} w.document.open();w.document.write(html);w.document.close();
 }
-$('generate').onclick=generate;
-function renderRoster(y,m,days,totals,shTotals,warnings){
- let h='<thead><tr><th>ลำดับ</th><th class="name">ชื่อ</th>';
- for(let d=1;d<=days;d++){let dow=new Date(y,m,d).getDay();h+=`<th class="${dow===0||dow===6?'weekend':''}">${d}<br>${['อา','จ','อ','พ','พฤ','ศ','ส'][dow]}</th>`}h+='<th>รวมหน่วยเวร</th></tr></thead><tbody>';
- for(let i=0;i<5;i++){h+=`<tr><td>${i+1}</td><td class="name">${esc(selected[i])}</td>`;let t=0;for(let d=1;d<=days;d++){let c=sched[i][d]||'',dow=new Date(y,m,d).getDay();t+=units(c);h+=`<td class="${c==='Vac'?'vac':c==='Off'?'off':(dow===0||dow===6?'weekend':'')}">${c}</td>`}h+=`<td><b>${t}</b></td></tr>`}h+='</tbody>';$('roster').innerHTML=h;
- const uniq=[...new Set(warnings)];$('status').innerHTML=uniq.length?`<div class="warn"><b>มีจุดที่กติกาทำให้จัดไม่ครบ:</b><br>${uniq.slice(0,12).map(esc).join('<br>')}${uniq.length>12?'<br>…':''}</div>`:`<div class="ok">จัดเวรครบตามกติกาและจำนวนที่กำหนดแล้วค่ะ</div>`;
- $('summary').innerHTML='<div class="summary-grid">'+selected.map((n,i)=>`<div class="sum"><b>${i+1}. ${esc(n)}</b><br>รวม ${totals[i]} หน่วย • ช ${shTotals[i].ช} • บ ${shTotals[i].บ} • ด ${shTotals[i].ด}</div>`).join('')+'</div>';
-}
-function excelExport(){
- if(!Object.keys(sched).length){alert('กรุณาจัดเวรก่อนค่ะ');return}
- const yBE=+$('year').value,m=+$('month').value,y=yBE-543,days=new Date(y,m+1,0).getDate();
- let html='<html><head><meta charset="utf-8"></head><body><table border="1"><tr><th colspan="'+(days+3)+'">ตารางเวรพักฟื้น '+TH_MONTHS[m]+' '+yBE+'</th></tr><tr><th>ลำดับ</th><th>ชื่อ</th>';
- for(let d=1;d<=days;d++)html+='<th>'+d+'</th>';html+='<th>รวมหน่วยเวร</th></tr>';
- for(let i=0;i<5;i++){let t=0;html+='<tr><td>'+(i+1)+'</td><td>'+esc(selected[i])+'</td>';for(let d=1;d<=days;d++){let c=sched[i][d]||'';t+=units(c);html+='<td>'+esc(c)+'</td>'}html+='<td>'+t+'</td></tr>'}html+='</table></body></html>';
- const blob=new Blob(['\ufeff',html],{type:'application/vnd.ms-excel'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`ตารางเวรพักฟื้น_${yBE}_${m+1}.xls`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)
-}
-$('excel').onclick=excelExport;
-renderNames();renderPrev();
-</script>
-</body></html>
+let now=new Date();month.value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');q('#slotCount').value=SLOT_COUNT;initNames();renderStaffList();q('#addStaff').onclick=addStaffName;q('#newStaff').addEventListener('keydown',e=>{if(e.key==='Enter')addStaffName()});q('#resetStaff').onclick=resetStaffList;q('#applySlots').onclick=applySlotCount;q('#mainBtn').onclick=generate;q('#fillBtn').onclick=fill;q('#clearBtn').onclick=clearRec;q('#excelBtn').onclick=exportExcel;q('#excelAllBtn').onclick=()=>exportOne('all');q('#excelNBtn').onclick=()=>exportOne('N');q('#excelHBtn').onclick=()=>exportOne('H');q('#excelShiftBtn').onclick=()=>exportOne('shift');q('#excelRecBtn').onclick=()=>exportOne('rec');q('#printBtn').onclick=()=>window.print();q('#printListBtn').onclick=printShiftList;month.onchange=generate;holidays.onchange=generate;generate();
+})();</script><script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));</script></body></html>
